@@ -1,0 +1,37 @@
+{
+    "name": "gupalo/prometheus-helper",
+    "description": "Prometheus Helper",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Gupalo\\PrometheusHelper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gupalo\\PrometheusHelper\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "promphp/prometheus_client_php": "^2.2"
+    },
+    "require-dev": {
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.5",
+        "roave/security-advisories": "dev-master"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "platform": {
+            "php": "7.4"
+        },
+        "sort-packages": true
+    }
+}
