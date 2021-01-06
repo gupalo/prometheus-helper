@@ -10,8 +10,16 @@ Install
 
 Use
 ---
-
-    // TODO: add examples
+```
+    public static function registration(bool $isSuccess): void
+    {
+        if ($isSuccess) {
+            PrometheusHelper::inc('analytics_registration_success_total', 'registration success');
+        } else {
+            PrometheusHelper::inc('analytics_registration_error_total', 'registration error');
+        }
+    }
+```
 
 Also see `tests`.
 
