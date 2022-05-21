@@ -3,3 +3,4 @@
 /coverage.xml
 /.phpunit.result.cache
 /.gitignore
+/composer.lock
