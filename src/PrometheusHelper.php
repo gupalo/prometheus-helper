@@ -16,6 +16,8 @@ class PrometheusHelper
 {
     private static string $namespace = 'app';
 
+    private static string $dir = '/code/var/prom';
+
     public static ?string $lastError = null;
 
     public static ?string $class = null;
@@ -232,18 +234,23 @@ class PrometheusHelper
         return $histogram;
     }
 
-    public static function getPrometheus(string $dir = '/code/var/prom'): CollectorRegistry
+    public static function getPrometheus(): CollectorRegistry
     {
         static $registry = null;
         if ($registry === null) {
-            $registry = new CollectorRegistry(new PrometheusFileAdapter($dir));
+            $registry = new CollectorRegistry(new FileAdapter(self::$dir));
         }
 
         return $registry;
     }
 
-    private static function setNamespace(string $namespace): void
+    public static function setNamespace(string $namespace): void
     {
         self::$namespace = $namespace;
+    }
+
+    public static function setDir(string $dir): void
+    {
+        self::$dir = $dir;
     }
 }
