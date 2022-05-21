@@ -29,9 +29,9 @@ class JsonAdapter extends InMemory implements JsonSerializable
         ];
     }
 
-    public static function createFromJson(array $data): self
+    public static function createFromJson(array $data): static
     {
-        return new self(
+        return new static(
             $data['counters'] ?? [],
             $data['gauges'] ?? [],
             $data['histograms'] ?? [],
