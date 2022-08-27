@@ -23,3 +23,4 @@ Use
 
 Also see `tests`.
 
+If you want to set custom directory for cache - `PrometheusHelper::setDir('/your/cache/dir/for/prom')`.
