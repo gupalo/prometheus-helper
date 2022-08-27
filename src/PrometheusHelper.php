@@ -256,7 +256,7 @@ class PrometheusHelper
 
     private static function getDir(): string
     {
-        if (self::$dir !== null) {
+        if (self::$dir === null) {
             $possibleDirs = [
                 ['/app', '/app/var/prom'],
                 ['/code', '/code/var/prom'],
