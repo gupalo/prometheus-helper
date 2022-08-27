@@ -16,7 +16,7 @@ class PrometheusHelper
 {
     private static string $namespace = 'app';
 
-    private static string $dir = '/code/var/prom';
+    private static ?string $dir = null;
 
     public static ?string $lastError = null;
 
@@ -238,7 +238,7 @@ class PrometheusHelper
     {
         static $registry = null;
         if ($registry === null) {
-            $registry = new CollectorRegistry(new FileAdapter(self::$dir));
+            $registry = new CollectorRegistry(new FileAdapter(self::getDir()));
         }
 
         return $registry;
@@ -252,5 +252,28 @@ class PrometheusHelper
     public static function setDir(string $dir): void
     {
         self::$dir = $dir;
+    }
+
+    private static function getDir(): string
+    {
+        if (self::$dir !== null) {
+            $possibleDirs = [
+                ['/app', '/app/var/prom'],
+                ['/code', '/code/var/prom'],
+                ['/tmp', '/tmp/prom'],
+            ];
+            foreach ($possibleDirs as $item) {
+                [$baseDir, $dir] = $item;
+                if (is_dir($baseDir)) {
+                    self::$dir = $dir;
+                    break;
+                }
+            }
+            if (self::$dir === null) {
+                throw new \RuntimeException('prometheus_missing_dir');
+            }
+        }
+
+        return self::$dir;
     }
 }
