@@ -261,6 +261,7 @@ class PrometheusHelper
                 ['/app', '/app/var/prom'],
                 ['/code', '/code/var/prom'],
                 ['/tmp', '/tmp/prom'],
+                ['c:/tmp', 'c:/tmp/prom'],
             ];
             foreach ($possibleDirs as $item) {
                 [$baseDir, $dir] = $item;
