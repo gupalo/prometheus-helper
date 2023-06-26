@@ -19,7 +19,7 @@
         "php": ">=8.1",
         "ext-json": "*",
         "gupalo/json": "*",
-        "promphp/prometheus_client_php": "^2.2",
+        "promphp/prometheus_client_php": "^2.7",
         "symfony/http-foundation": "^5.2|^6.0"
     },
     "require-dev": {
