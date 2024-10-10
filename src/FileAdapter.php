@@ -9,7 +9,7 @@ use RuntimeException;
 
 class FileAdapter extends JsonAdapter
 {
-    private $filenameData;
+    private string $filenameData;
 
     public function __construct(string $dir)
     {
@@ -22,7 +22,7 @@ class FileAdapter extends JsonAdapter
             $json['counters'] ?? [],
             $json['gauges'] ?? [],
             $json['histograms'] ?? [],
-            $json['summaries'] ?? []
+            $json['summaries'] ?? [],
         );
     }
 

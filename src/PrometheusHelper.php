@@ -14,22 +14,22 @@ use Throwable;
 
 class PrometheusHelper
 {
-    public static $isEnabled = false;
+    public static bool $isEnabled = true;
 
-    public static $namespace = 'app';
+    public static string $namespace = 'app';
 
-    public static $dir;
+    public static ?string $dir = null;
 
-    public static $lastError;
+    public static ?string $lastError = null;
 
-    public static $class;
+    public static ?string $class = null;
 
     /**
      * @param string $name e.g. requests
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function inc($name, string $help = null, array $labels = []): void
+    public static function inc(string $name, string $help = null, array $labels = []): void
     {
         self::incBy(1, $name, $help ?? $name, $labels);
     }
@@ -40,7 +40,7 @@ class PrometheusHelper
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function incBy($count, $name, string $help = null, array $labels = []): void
+    public static function incBy(int $count, string $name, string $help = null, array $labels = []): void
     {
         if (!self::$isEnabled) {
             return;
@@ -64,7 +64,7 @@ class PrometheusHelper
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function set(float $value, $name, string $help = null, array $labels = []): void
+    public static function set(float $value, string $name, string $help = null, array $labels = []): void
     {
         if (!self::$isEnabled) {
             return;
@@ -83,18 +83,18 @@ class PrometheusHelper
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function gaugeInc($name, string $help = null, array $labels = []): void
+    public static function gaugeInc(string $name, string $help = null, array $labels = []): void
     {
         self::gaugeIncBy(1, $name, $help ?? $name, $labels);
     }
 
     /**
-     * @param int|float $count e.g. 2
+     * @param float|int $count e.g. 2
      * @param string $name e.g. requests
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function gaugeIncBy($count, $name, string $help = null, array $labels = []): void
+    public static function gaugeIncBy(float|int $count, string $name, string $help = null, array $labels = []): void
     {
         if (!self::$isEnabled) {
             return;
@@ -117,18 +117,18 @@ class PrometheusHelper
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function gaugeDec($name, string $help = null, array $labels = []): void
+    public static function gaugeDec(string $name, string $help = null, array $labels = []): void
     {
         self::gaugeDecBy(1, $name, $help ?? $name, $labels);
     }
 
     /**
-     * @param int|float $count e.g. 2
+     * @param float|int $count e.g. 2
      * @param string $name e.g. requests
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function gaugeDecBy($count, $name, string $help = null, array $labels = []): void
+    public static function gaugeDecBy(float|int $count, string $name, string $help = null, array $labels = []): void
     {
         if (!self::$isEnabled) {
             return;
@@ -152,7 +152,7 @@ class PrometheusHelper
      * @param ?string $help e.g. The number of requests made.
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      */
-    public static function gaugeSet(float $value, $name, string $help = null, array $labels = []): void
+    public static function gaugeSet(float $value, string $name, string $help = null, array $labels = []): void
     {
         if (!self::$isEnabled) {
             return;
@@ -174,7 +174,7 @@ class PrometheusHelper
      * @param array $labels e.g. ['controller' => 'myController', 'action' => 'myAction']
      * @param ?array $buckets e.g. [100, 200, 300]
      */
-    public static function observe(float $value, $name, string $help = null, $labels = [], $buckets = null): void
+    public static function observe(float $value, string $name, string $help = null, array $labels = [], array $buckets = null): void
     {
         if (!self::$isEnabled) {
             return;
@@ -206,11 +206,11 @@ class PrometheusHelper
      * @return Counter
      * @throws MetricsRegistrationException
      */
-    private static function getCounter($name, string $help = null, $labels = []): Counter
+    private static function getCounter(string $name, string $help = null, array $labels = []): Counter
     {
         try {
             $counter = self::getPrometheus()->getCounter(self::$namespace, $name);
-        } catch (MetricNotFoundException $e) {
+        } catch (MetricNotFoundException) {
             $counter = self::getPrometheus()->registerCounter(self::$namespace, $name, $help ?? $name, $labels);
         }
 
@@ -224,11 +224,11 @@ class PrometheusHelper
      * @return Gauge
      * @throws MetricsRegistrationException
      */
-    private static function getGauge($name, string $help = null, $labels = []): Gauge
+    private static function getGauge(string $name, string $help = null, array $labels = []): Gauge
     {
         try {
             $gauge = self::getPrometheus()->getGauge(self::$namespace, $name);
-        } catch (MetricNotFoundException $e) {
+        } catch (MetricNotFoundException) {
             $gauge = self::getPrometheus()->registerGauge(self::$namespace, $name, $help ?? $name, $labels);
         }
 
@@ -243,17 +243,17 @@ class PrometheusHelper
      * @return Histogram
      * @throws MetricsRegistrationException
      */
-    private static function getHistogram($name, string $help = null, $labels = [], $buckets = null): Histogram
+    private static function getHistogram(string $name, string $help = null, array $labels = [], array $buckets = null): Histogram
     {
         try {
             $histogram = self::getPrometheus()->getHistogram(self::$namespace, $name);
-        } catch (MetricNotFoundException $e) {
+        } catch (MetricNotFoundException) {
             $histogram = self::getPrometheus()->registerHistogram(
-                self::$namespace,
-                $name,
-                $help ?? $name,
-                $labels,
-                $buckets
+                namespace: self::$namespace,
+                name: $name,
+                help: $help ?? $name,
+                labels: $labels,
+                buckets: $buckets,
             );
         }
 
@@ -285,9 +285,7 @@ class PrometheusHelper
         if (self::$dir === null) {
             $possibleDirs = [
                 ['/app', '/app/var/prom'],
-                ['/code', '/code/var/prom'],
                 ['/tmp', '/tmp/prom'],
-                ['c:/tmp', 'c:/tmp/prom'],
             ];
             foreach ($possibleDirs as $item) {
                 [$baseDir, $dir] = $item;
