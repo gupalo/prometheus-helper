@@ -11,7 +11,7 @@ class JsonAdapter extends InMemory implements JsonSerializable
         array $counters = [],
         array $gauges = [],
         array $histograms = [],
-        array $summaries = [],
+        array $summaries = []
     ) {
         $this->counters = $counters;
         $this->gauges = $gauges;
@@ -29,13 +29,13 @@ class JsonAdapter extends InMemory implements JsonSerializable
         ];
     }
 
-    public static function createFromJson(array $data): static
+    public static function createFromJson(array $data): self
     {
-        return new static(
+        return new self(
             $data['counters'] ?? [],
             $data['gauges'] ?? [],
             $data['histograms'] ?? [],
-            $data['summaries'] ?? [],
+            $data['summaries'] ?? []
         );
     }
 }

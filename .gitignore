@@ -4,3 +4,4 @@
 /.phpunit.result.cache
 /.gitignore
 /composer.lock
+/tests/data.json

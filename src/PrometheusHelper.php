@@ -14,13 +14,15 @@ use Throwable;
 
 class PrometheusHelper
 {
-    private static string $namespace = 'app';
+    public static $isEnabled = false;
 
-    private static ?string $dir = null;
+    public static $namespace = 'app';
 
-    public static ?string $lastError = null;
+    public static $dir;
 
-    public static ?string $class = null;
+    public static $lastError;
+
+    public static $class;
 
     /**
      * @param string $name e.g. requests
@@ -40,6 +42,10 @@ class PrometheusHelper
      */
     public static function incBy($count, $name, string $help = null, array $labels = []): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
         if (!$count) {
             return;
@@ -60,6 +66,10 @@ class PrometheusHelper
      */
     public static function set(float $value, $name, string $help = null, array $labels = []): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
         try {
             self::getGauge($name, $help ?? $name, array_keys($labels))->set($value, array_values($labels));
@@ -86,6 +96,10 @@ class PrometheusHelper
      */
     public static function gaugeIncBy($count, $name, string $help = null, array $labels = []): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
         if (!$count) {
             return;
@@ -116,6 +130,10 @@ class PrometheusHelper
      */
     public static function gaugeDecBy($count, $name, string $help = null, array $labels = []): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
         if (!$count) {
             return;
@@ -136,6 +154,10 @@ class PrometheusHelper
      */
     public static function gaugeSet(float $value, $name, string $help = null, array $labels = []): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
 
         try {
@@ -154,6 +176,10 @@ class PrometheusHelper
      */
     public static function observe(float $value, $name, string $help = null, $labels = [], $buckets = null): void
     {
+        if (!self::$isEnabled) {
+            return;
+        }
+
         self::$lastError = null;
         try {
             self::getHistogram($name, $help ?? $name, array_keys($labels), $buckets)
