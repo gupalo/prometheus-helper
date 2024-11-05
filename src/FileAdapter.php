@@ -44,7 +44,14 @@ class FileAdapter extends JsonAdapter
 
         $data = file_get_contents($this->filenameData);
 
-        return Json::toArray($data);
+        try {
+            $result = Json::toArray($data);
+        } catch (\Throwable $e) {
+            $result = [];
+            file_put_contents($this->filenameData, '{}');
+        }
+
+        return $result;
     }
 
     protected function ensureDir(string $dir): string
