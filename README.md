@@ -1,7 +1,7 @@
 Prometheus Helper
 =================
 
-Wrapper for PHP Prometheus library - `promphp/prometheus_client_php`
+Wrapper for PHP Prometheus library - https://github.com/PromPHP/prometheus_client_php
 
 Install
 -------
