@@ -22,7 +22,8 @@ This is a PHP library that provides a simplified wrapper around the [promphp/pro
 
 ### Key Components
 
-- **PrometheusHelper** (`src/PrometheusHelper.php`) - Static facade providing simple methods for Prometheus metrics:
+- **Prometheus** (`src/Prometheus.php`) - Injectable service providing simple methods for Prometheus metrics:
+  - Constructor accepts any `Prometheus\Storage\Adapter` and optional namespace
   - `inc()`, `incBy()` - Counter operations
   - `set()`, `gaugeInc()`, `gaugeIncBy()`, `gaugeDec()`, `gaugeDecBy()`, `gaugeSet()` - Gauge operations
   - `observe()` - Histogram operations
@@ -30,12 +31,14 @@ This is a PHP library that provides a simplified wrapper around the [promphp/pro
 
 - **FileAdapter** (`src/FileAdapter.php`) - Storage adapter that persists metrics to a JSON file (`data.json`). Extends JsonAdapter and flushes on destruction.
 
+- **RedisAdapter** (`src/RedisAdapter.php`) - Redis storage adapter with DSN support. Extends promphp Redis adapter and parses DSN like `redis://user:pass@host:port/database`.
+
 - **JsonAdapter** (`src/JsonAdapter.php`) - Extends Prometheus InMemory adapter with JSON serialization support.
 
-### Configuration
+### Storage Adapters
 
-- `PrometheusHelper::$namespace` - Metric namespace (default: 'app')
-- `PrometheusHelper::setDir()` - Set custom storage directory
-- `PrometheusHelper::$isEnabled` - Toggle metrics collection on/off
-
-Default storage directories: `/app/var/prom` or `/tmp/prom`
+The library supports any adapter implementing `Prometheus\Storage\Adapter`:
+- `FileAdapter` - JSON file-based storage (included)
+- `RedisAdapter` - Redis storage with DSN support (included, requires ext-redis)
+- `Prometheus\Storage\InMemory` - In-memory storage (from promphp library)
+- `Prometheus\Storage\APC` - APCu storage (from promphp library)
