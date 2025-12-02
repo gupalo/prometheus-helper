@@ -48,7 +48,7 @@ class FileAdapter extends JsonAdapter
             $result = Json::toArray($data);
         } catch (\Throwable) {
             $result = [];
-            file_put_contents($this->filenameData, '{}');
+            $this->wipeStorage();
         }
 
         return $result;
@@ -62,5 +62,22 @@ class FileAdapter extends JsonAdapter
         }
 
         return $dir;
+    }
+
+    public function wipeStorage(): void
+    {
+        $this->counters = [];
+        $this->gauges = [];
+        $this->histograms = [];
+        $this->summaries = [];
+
+        if ($this->filenameData) {
+            try {
+                $this->ensureDir(dirname($this->filenameData));
+                file_put_contents($this->filenameData, '{}');
+            } catch (\Throwable) {
+                // do nothing
+            }
+        }
     }
 }
