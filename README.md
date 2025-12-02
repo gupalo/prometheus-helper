@@ -97,3 +97,18 @@ class MyService
 ```
 
 Also see `tests` for more examples.
+
+### Migration from v1 to v2
+
+Ask Claude:
+```
+find all PrometheusHelper usages and change to Prometheus
+read doc from: vendor/gupalo/prometheus-helper/README.md
+```
+
+Or do it manually:
+
+- update `config/services.yaml` - add code from "Symfony Integration" section above
+- change all `use Gupalo\PrometheusHelper\PrometheusHelper;` to `use Gupalo\PrometheusHelper\Prometheus;`
+- add to constructor `private readonly Prometheus $prometheus,`
+- change all `PrometheusHelper::` to `$this->prometheus->`
